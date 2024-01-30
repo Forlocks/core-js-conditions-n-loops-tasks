@@ -39,15 +39,19 @@ function isPositive(number) {
  *  -0.1, 0, 0.2  => 0.2
  */
 function getMaxNumber(a, b, c) {
+  let result;
+
   if (a >= b && a >= c) {
-    return a;
+    result = a;
   }
   if (b >= a && b >= c) {
-    return b;
+    result = b;
   }
   if (c >= a && c >= b) {
-    return c;
+    result = c;
   }
+
+  return result;
 }
 
 /**
@@ -169,6 +173,8 @@ function convertToRomanNumerals(num) {
     case 9:
       result += 'IX';
       break;
+    default:
+      break;
   }
 
   return result;
@@ -232,6 +238,8 @@ function convertNumberToString(numberStr) {
         break;
       case '9':
         result += 'nine';
+        break;
+      default:
         break;
     }
 
@@ -379,49 +387,63 @@ function getSpiralMatrix(size) {
 
   let value = 0;
 
-  function toRight(i, j) {
+  function toUp(x, y) {
+    let i = x;
+    const j = y;
+
+    for (i; i >= 0 && arr[i][j] === undefined; i -= 1) {
+      value += 1;
+
+      arr[i][j] = value;
+    }
+
+    if (value !== size * size) {
+      toRight(i + 1, j + 1);
+    }
+  }
+
+  function toLeft(x, y) {
+    const i = x;
+    let j = y;
+
+    for (j; j >= 0 && arr[i][j] === undefined; j -= 1) {
+      value += 1;
+
+      arr[i][j] = value;
+    }
+
+    if (value !== size * size) {
+      toUp(i - 1, j + 1);
+    }
+  }
+
+  function toDown(x, y) {
+    let i = x;
+    const j = y;
+
+    for (i; i < size && arr[i][j] === undefined; i += 1) {
+      value += 1;
+
+      arr[i][j] = value;
+    }
+
+    if (value !== size * size) {
+      toLeft(i - 1, j - 1);
+    }
+  }
+
+  function toRight(x, y) {
+    const i = x;
+    let j = y;
+
     for (j; j < size && arr[i][j] === undefined; j += 1) {
       value += 1;
 
       arr[i][j] = value;
     }
 
-    if (value === size * size) {
-    } else {
+    if (value !== size * size) {
       toDown(i + 1, j - 1);
-    }
-  }
-
-  function toDown(i, j) {
-    for (i; i < size && arr[i][j] === undefined; i += 1) {
-      arr[i][j] = ++value;
-    }
-
-    if (value === size * size) {
-    } else {
-      toLeft(i - 1, j - 1);
-    }
-  }
-
-  function toLeft(i, j) {
-    for (j; j >= 0 && arr[i][j] === undefined; j -= 1) {
-      arr[i][j] = ++value;
-    }
-
-    if (value === size * size) {
-    } else {
-      toUp(i - 1, j + 1);
-    }
-  }
-
-  function toUp(i, j) {
-    for (i; i >= 0 && arr[i][j] === undefined; i -= 1) {
-      arr[i][j] = ++value;
-    }
-
-    if (value === size * size) {
-    } else {
-      toRight(i + 1, j + 1);
     }
   }
 
@@ -451,22 +473,23 @@ function getSpiralMatrix(size) {
  */
 function rotateMatrix(matrix) {
   const matrixLink = new Array(matrix.length);
+  const newMatrix = matrix;
 
-  for (let i = 0; i < matrix.length; i += 1) {
-    matrixLink[i] = new Array(matrix[i].length);
+  for (let i = 0; i < newMatrix.length; i += 1) {
+    matrixLink[i] = new Array(newMatrix[i].length);
 
-    for (let j = 0; j < matrix[i].length; j += 1) {
-      matrixLink[i][j] = matrix[i][j];
+    for (let j = 0; j < newMatrix[i].length; j += 1) {
+      matrixLink[i][j] = newMatrix[i][j];
     }
   }
 
-  for (let i = 0; i < matrix.length; i += 1) {
-    for (let j = 0; j < matrix.length; j += 1) {
-      matrix[i][j] = matrixLink[matrix.length - 1 - j][i];
+  for (let i = 0; i < newMatrix.length; i += 1) {
+    for (let j = 0; j < newMatrix.length; j += 1) {
+      newMatrix[i][j] = matrixLink[newMatrix.length - 1 - j][i];
     }
   }
 
-  return matrix;
+  return newMatrix;
 }
 
 /**
@@ -484,34 +507,36 @@ function rotateMatrix(matrix) {
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
 function sortByAsc(arr) {
-  (function fastSort(start = 0, end = arr.length - 1) {
+  const newArr = arr;
+
+  (function fastSort(start = 0, end = newArr.length - 1) {
     if (start < end) {
-      const pivotValue = arr[end];
+      const pivotValue = newArr[end];
 
       let i = start - 1;
 
       for (let j = start; j < end; j += 1) {
-        if (arr[j] <= pivotValue) {
+        if (newArr[j] <= pivotValue) {
           i += 1;
 
-          const copyValue = arr[i];
+          const copyValue = newArr[i];
 
-          arr[i] = arr[j];
-          arr[j] = copyValue;
+          newArr[i] = newArr[j];
+          newArr[j] = copyValue;
         }
       }
 
-      const copyValue = arr[i + 1];
+      const copyValue = newArr[i + 1];
 
-      arr[i + 1] = arr[end];
-      arr[end] = copyValue;
+      newArr[i + 1] = newArr[end];
+      newArr[end] = copyValue;
 
       fastSort(start, i);
       fastSort(i + 2, end);
     }
   })();
 
-  return arr;
+  return newArr;
 }
 
 /**
@@ -537,30 +562,31 @@ function shuffleChar(str, iterations) {
   }
 
   const strCopy = str;
+  let newStr = str;
 
   for (let i = 0; i < iterations; i += 1) {
     let str1 = '';
     let str2 = '';
 
-    for (let j = 0; j < str.length; j += 1) {
+    for (let j = 0; j < newStr.length; j += 1) {
       if (j % 2 === 0) {
-        str1 += str[j];
+        str1 += newStr[j];
       } else {
-        str2 += str[j];
+        str2 += newStr[j];
       }
     }
 
-    str = str1 + str2;
+    newStr = str1 + str2;
 
-    if (str === strCopy) {
+    if (newStr === strCopy) {
       return shuffleChar(
-        str,
+        newStr,
         iterations - Math.floor(iterations / (i + 1)) * (i + 1)
       );
     }
   }
 
-  return str;
+  return newStr;
 }
 
 /**
@@ -593,7 +619,7 @@ function getNearestBigger(number) {
       let minValue = 10;
       let minIndex = -1;
 
-      for (let j = i + 1; j <= lastIndex; j++) {
+      for (let j = i + 1; j <= lastIndex; j += 1) {
         if (arr[j] > arr[i] && arr[j] < minValue) {
           minValue = arr[j];
           minIndex = j;
