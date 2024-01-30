@@ -387,52 +387,52 @@ function getSpiralMatrix(size) {
 
   let value = 0;
 
-  function toUp(x, y) {
-    let i = x;
-    const j = y;
-
-    for (i; i >= 0 && arr[i][j] === undefined; i -= 1) {
-      value += 1;
-
-      arr[i][j] = value;
-    }
-
-    if (value !== size * size) {
-      toRight(i + 1, j + 1);
-    }
-  }
-
-  function toLeft(x, y) {
-    const i = x;
-    let j = y;
-
-    for (j; j >= 0 && arr[i][j] === undefined; j -= 1) {
-      value += 1;
-
-      arr[i][j] = value;
-    }
-
-    if (value !== size * size) {
-      toUp(i - 1, j + 1);
-    }
-  }
-
-  function toDown(x, y) {
-    let i = x;
-    const j = y;
-
-    for (i; i < size && arr[i][j] === undefined; i += 1) {
-      value += 1;
-
-      arr[i][j] = value;
-    }
-
-    if (value !== size * size) {
-      toLeft(i - 1, j - 1);
-    }
-  }
-
   function toRight(x, y) {
+    function toDown(xx, yy) {
+      function toLeft(xxx, yyy) {
+        function toUp(xxxx, yyyy) {
+          let i = xxxx;
+          const j = yyyy;
+
+          for (i; i >= 0 && arr[i][j] === undefined; i -= 1) {
+            value += 1;
+
+            arr[i][j] = value;
+          }
+
+          if (value !== size * size) {
+            toRight(i + 1, j + 1);
+          }
+        }
+
+        const i = xxx;
+        let j = yyy;
+
+        for (j; j >= 0 && arr[i][j] === undefined; j -= 1) {
+          value += 1;
+
+          arr[i][j] = value;
+        }
+
+        if (value !== size * size) {
+          toUp(i - 1, j + 1);
+        }
+      }
+
+      let i = xx;
+      const j = yy;
+
+      for (i; i < size && arr[i][j] === undefined; i += 1) {
+        value += 1;
+
+        arr[i][j] = value;
+      }
+
+      if (value !== size * size) {
+        toLeft(i - 1, j - 1);
+      }
+    }
+
     const i = x;
     let j = y;
 
